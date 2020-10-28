@@ -91,7 +91,7 @@ int SignificantInversions(vector<int> &A,int low,int high){
     SignificantInversions(A,mid+1,high);
     int res=0,i=low,j=mid+1;
     while (i<=mid&&j<=high){
-        if (A[i]>3*A[j]){
+        if (3*A[i]>A[j]){
             res+=(mid-i+1);
             j=j+1;
         } else
