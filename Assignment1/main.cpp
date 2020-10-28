@@ -80,7 +80,42 @@ int TriangleDivide(int n) {
         ans = ans + TriangleDivide(i) * TriangleDivide(n - i + 1);
     }
     return ans;
+}
 
+int SignificantInversions(vector<int> &A,int low,int high){
+    if (low==high){
+        return 0;
+    }
+    int mid=(low+high)/2;
+    SignificantInversions(A,low,mid);
+    SignificantInversions(A,mid+1,high);
+    int res=0,i=low,j=mid+1;
+    while (i<=mid&&j<=high){
+        if (A[i]>3*A[j]){
+            res+=(mid-i+1);
+            j=j+1;
+        } else
+            i=i+1;
+    }
+    int bi=low,bj=mid+1,k=0;
+    int* B=new int[high-low+1];
+    while (bi<=mid&& bj<=high){
+        if (A[bi]<A[bj]){
+            B[k++]=A[bi++];
+        } else{
+            B[k++]=A[bj++];
+        }
+    }
+    while (bi<=mid){
+        B[k++]=A[bi++];
+    }
+    while (bj<=high){
+        B[k++]=A[bj++];
+    }
+    for (int l = 0; l <= k-1; ++l) {
+        A[low+l]=B[l];
+    }
+    return res;
 }
 
 int main() {
@@ -108,5 +143,11 @@ int main() {
     int n = 5;
     //输出：多边形的三角剖分
     cout << n << "变形的三角剖分为: " << TriangleDivide(n) << endl;
+
+    //question 6 显著逆序列数
+    cout<<"====question 6 显著逆序列数===="<<endl;
+    vector<int> A6={7,1,9,2,3,5,0};
+    cout<<"显著逆序列数为："<<SignificantInversions(A6,0,6)<<endl;
+
     return 0;
 }
