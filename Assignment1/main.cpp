@@ -73,47 +73,51 @@ vector<int> TargetRange(vector<int> &A, int n, int target) {
 
 //question 5
 int TriangleDivide(int n) {
-    if (n == 2 || n == 3)
-        return 1;
-    int ans = 0;
-    for (int i = 2; i <= n - 1; ++i) {
-        ans = ans + TriangleDivide(i) * TriangleDivide(n - i + 1);
+    vector<int> td = {0};
+    td[2] = 1;
+    td[3] = 1;
+    for (int i = 4; i <= n; ++i) {
+        int ans = 0;
+        for (int j = 2; j <= n - 1; ++j) {
+            ans = ans + TriangleDivide(j) * TriangleDivide(n - j + 1);
+        }
+        td[i] = ans;
     }
-    return ans;
+    return td[n];
 }
 
-int SignificantInversions(vector<int> &A,int low,int high){
-    if (low==high){
+int SignificantInversions(vector<int> &A, int low, int high) {
+    if (low == high) {
         return 0;
     }
-    int mid=(low+high)/2;
-    SignificantInversions(A,low,mid);
-    SignificantInversions(A,mid+1,high);
-    int res=0,i=low,j=mid+1;
-    while (i<=mid&&j<=high){
-        if (3*A[i]>A[j]){
-            res+=(mid-i+1);
-            j=j+1;
+    int mid = (low + high) / 2;
+    SignificantInversions(A, low, mid);
+    SignificantInversions(A, mid + 1, high);
+    int res = 0, i = low, j = mid + 1;
+    while (i <= mid && j <= high) {
+        if (3 * A[i] > A[j]) {
+            res += (mid - i + 1);
+            j = j + 1;
         } else
-            i=i+1;
+            i = i + 1;
     }
-    int bi=low,bj=mid+1,k=0;
-    int* B=new int[high-low+1];
-    while (bi<=mid&& bj<=high){
-        if (A[bi]<A[bj]){
-            B[k++]=A[bi++];
-        } else{
-            B[k++]=A[bj++];
+    int bi = low, bj = mid + 1, k = 0;
+    int *B = new int[high - low + 1];
+    while (bi <= mid && bj <= high) {
+        if (A[bi] < A[bj]) {
+            B[k++] = A[bi++];
+        } else {
+            B[k++] = A[bj++];
         }
     }
-    while (bi<=mid){
-        B[k++]=A[bi++];
+    while (bi <= mid) {
+        B[k++] = A[bi++];
     }
-    while (bj<=high){
-        B[k++]=A[bj++];
+    while (bj <= high) {
+        B[k++] = A[bj++];
     }
-    for (int l = 0; l <= k-1; ++l) {
-        A[low+l]=B[l];
+    for (int l = 0; l <= k - 1; ++l) {
+        A[low + l] = B[l];
     }
     return res;
 }
@@ -145,9 +149,9 @@ int main() {
     cout << n << "变形的三角剖分为: " << TriangleDivide(n) << endl;
 
     //question 6 显著逆序列数
-    cout<<"====question 6 显著逆序列数===="<<endl;
-    vector<int> A6={7,1,9,2,3,5,0};
-    cout<<"显著逆序列数为："<<SignificantInversions(A6,0,6)<<endl;
+    cout << "====question 6 显著逆序列数====" << endl;
+    vector<int> A6 = {7, 1, 9, 2, 3, 5, 0};
+    cout << "显著逆序列数为：" << SignificantInversions(A6, 0, 6) << endl;
 
     return 0;
 }
